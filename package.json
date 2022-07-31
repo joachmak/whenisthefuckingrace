@@ -1,7 +1,7 @@
 {
     "name": "f1times",
     "version": "0.1.0",
-    "homepage": "https://whenisthefuckingrace.joachimmaksim.no",
+    "homepage": "http://joachmak.github.io/whenisthefuckingrace",
     "private": true,
     "dependencies": {
         "@chakra-ui/react": "^2.2.4",

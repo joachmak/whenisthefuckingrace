@@ -72,7 +72,7 @@ function App() {
     const [nextEventName, setNextEventName] = useState("");
     const [nextEventType, setNextEventType] = useState("");
     useEffect(() => {
-        fetch("http://ergast.com/api/f1/current")
+        fetch("https://ergast.com/api/f1/current")
             .then((res) => res.text())
             .then((data) => {
                 let parser = new DOMParser();
