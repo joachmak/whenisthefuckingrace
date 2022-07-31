@@ -15,11 +15,11 @@ const getEventDatetime = (el: Element) => {
     if (el === undefined) return undefined;
     const date = el.getElementsByTagName("Date")[0].textContent;
     const time = el.getElementsByTagName("Time")[0].textContent;
-    return new Date(date + " " + time);
+    return new Date(date + "T" + time);
 };
 
 const getRaceDatetime = (date: string, time: string) => {
-    return new Date(date + " " + time);
+    return new Date(date + "T" + time);
 };
 
 const useStyles = createUseStyles({
@@ -39,6 +39,8 @@ const useStyles = createUseStyles({
             return "1.1em";
         },
         fontFamily: "AdamCgPro",
+        margin: "10px 0",
+        lineHeight: 1.5,
     },
     largeTxt: {
         fontFamily: "AdamCgPro",
@@ -48,14 +50,7 @@ const useStyles = createUseStyles({
         },
         fontWeight: "bold",
         textTransform: "uppercase",
-        marginTop: (props: StyleProps) => {
-            if (props.screenWidth < 1000) return -5;
-            return -25;
-        },
-        marginBottom: (props: StyleProps) => {
-            if (props.screenWidth < 1000) return -10;
-            return -5;
-        },
+        margin: "10px 0",
     },
     swearwordBlur: {
         color: "rgb(255, 176, 176)",
