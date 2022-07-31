@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.51756c6a.css",
-    "main.js": "/static/js/main.acd329d7.js",
-    "static/js/787.b07e0b6d.chunk.js": "/static/js/787.b07e0b6d.chunk.js",
-    "static/media/adam-cg-pro.regular.otf": "/static/media/adam-cg-pro.regular.94966bfa189a09f0a303.otf",
-    "index.html": "/index.html",
-    "main.51756c6a.css.map": "/static/css/main.51756c6a.css.map",
-    "main.acd329d7.js.map": "/static/js/main.acd329d7.js.map",
-    "787.b07e0b6d.chunk.js.map": "/static/js/787.b07e0b6d.chunk.js.map"
+    "main.css": "/whenisthefuckingrace/static/css/main.ee823116.css",
+    "main.js": "/whenisthefuckingrace/static/js/main.492cedc8.js",
+    "static/js/787.b07e0b6d.chunk.js": "/whenisthefuckingrace/static/js/787.b07e0b6d.chunk.js",
+    "static/media/adam-cg-pro.regular.otf": "/whenisthefuckingrace/static/media/adam-cg-pro.regular.94966bfa189a09f0a303.otf",
+    "index.html": "/whenisthefuckingrace/index.html",
+    "main.ee823116.css.map": "/whenisthefuckingrace/static/css/main.ee823116.css.map",
+    "main.492cedc8.js.map": "/whenisthefuckingrace/static/js/main.492cedc8.js.map",
+    "787.b07e0b6d.chunk.js.map": "/whenisthefuckingrace/static/js/787.b07e0b6d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.51756c6a.css",
-    "static/js/main.acd329d7.js"
+    "static/css/main.ee823116.css",
+    "static/js/main.492cedc8.js"
   ]
 }
