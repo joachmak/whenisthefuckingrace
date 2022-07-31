@@ -4,6 +4,6 @@ This small web app fetches F1 season race data from ergast.com and converts each
 Visit [whenisthefuckingrace.joachimmaksim.no](https://whenisthefuckingrace.joachimmaksim.no) to see it in action ;D
 
 ## Motivation
-![image](https://user-images.githubusercontent.com/55885044/182022906-d7f5af13-1a1a-47d4-916c-752c6627c2a4.png)
+![image](http://user-images.githubusercontent.com/55885044/182022906-d7f5af13-1a1a-47d4-916c-752c6627c2a4.png)
 
 And also my complete lack of knowledge about timezones / timezone conversion / time in general
