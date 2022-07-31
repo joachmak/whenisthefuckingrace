@@ -144,7 +144,6 @@ function App() {
                         if (a.datetime > b.datetime) return 1;
                         return -1;
                     });
-                    console.log(eventArr);
                     for (let i = 0; i < eventArr.length; i++) {
                         if (
                             eventArr[i].datetime === undefined ||
