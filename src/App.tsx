@@ -62,6 +62,10 @@ const useStyles = createUseStyles({
     section: {
         margin: "20px 0",
     },
+    url: {
+        color: "white",
+        wordBreak: "break-all",
+    },
 });
 
 function App() {
@@ -71,6 +75,7 @@ function App() {
     >(undefined);
     const [nextEventName, setNextEventName] = useState("");
     const [nextEventType, setNextEventType] = useState("");
+    const [err, setErr] = useState(false);
     useEffect(() => {
         fetch("https://ergast.com/api/f1/current")
             .then((res) => res.text())
@@ -157,13 +162,43 @@ function App() {
                     }
                     break;
                 }
+            })
+            .catch(() => {
+                setErr(true);
             });
     }, []);
     const classes = useStyles({ screenWidth: screenSize });
     return (
         <div className={classes.container}>
+            {err && (
+                <div className={classes.section}>
+                    <h2
+                        className={[classes.largeTxt, classes.redWord].join(
+                            " "
+                        )}
+                    >
+                        FUCK
+                    </h2>
+                    <p className={classes.smallTxt}>
+                        No time for censorship, something went really{" "}
+                        <span className={classes.redWord}>fucking</span> wrong.
+                    </p>
+                    <p className={classes.smallTxt}>Try refreshing the page.</p>
+                    <p className={classes.smallTxt}>
+                        Didn't work?{" "}
+                        <span className={classes.redWord}>Shit</span>, I guess
+                        we'll have to learn about timezones.
+                    </p>
+                    <a
+                        className={classes.url}
+                        href="https://en.wikipedia.org/wiki/Time_zone"
+                    >
+                        https://en.wikipedia.org/wiki/Time_zone
+                    </a>
+                </div>
+            )}
             <div className={classes.section}>
-                {nextEventName ? (
+                {nextEventName && !err ? (
                     <>
                         <p className={classes.smallTxt}>
                             The next{" "}
@@ -184,11 +219,11 @@ function App() {
                         </p>
                     </>
                 ) : (
-                    <>...</>
+                    <>{!err && "..."}</>
                 )}
             </div>
             <div className={classes.section}>
-                {nextEventType ? (
+                {nextEventType && !err ? (
                     <>
                         <p className={classes.smallTxt}>
                             It's gonna be a{" "}
@@ -203,7 +238,7 @@ function App() {
                 )}
             </div>
             <div className={classes.section}>
-                {nextEventDatetime ? (
+                {nextEventDatetime && !err ? (
                     <>
                         <p className={classes.smallTxt}>It's gonna start at</p>
                         <h2 className={classes.largeTxt}>
