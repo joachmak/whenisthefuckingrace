@@ -75,6 +75,7 @@ function App() {
     >(undefined);
     const [nextEventName, setNextEventName] = useState("");
     const [nextEventType, setNextEventType] = useState("");
+    const [raceEvent, setRaceEvent] = useState<Event>();
     const [err, setErr] = useState(false);
     useEffect(() => {
         fetch("https://ergast.com/api/f1/current")
@@ -141,8 +142,8 @@ function App() {
                         eventName: "Sprint",
                         datetime: getEventDatetime(sprintTag),
                     };
-
                     const eventArr = [fp1, fp2, fp3, quali, sprint, race];
+                    setRaceEvent(race);
                     eventArr.sort((a, b) => {
                         if (a.datetime === undefined) return -1;
                         if (b.datetime === undefined) return 1;
@@ -260,6 +261,14 @@ function App() {
                     ""
                 )}
             </div>
+            {nextEventType !== "Race" && raceEvent && (
+                <div className={classes.section}>
+                    <p className={classes.smallTxt}>
+                        (Race starts at{" "}
+                        {raceEvent.datetime?.toLocaleString("no-NO")})
+                    </p>
+                </div>
+            )}
         </div>
     );
 }
