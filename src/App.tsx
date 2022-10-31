@@ -109,7 +109,7 @@ function App() {
                                 raceData.getElementsByTagName(
                                     "FirstPractice"
                                 )[0]
-                            ) || new Date(),
+                            ) || undefined,
                     };
                     const fp2: Event = {
                         eventName: "Second Practice",
@@ -118,7 +118,7 @@ function App() {
                                 raceData.getElementsByTagName(
                                     "SecondPractice"
                                 )[0]
-                            ) || new Date(),
+                            ) || undefined,
                     };
                     const fp3: Event = {
                         eventName: "Third Practice",
@@ -127,14 +127,14 @@ function App() {
                                 raceData.getElementsByTagName(
                                     "ThirdPractice"
                                 )[0]
-                            ) || new Date(),
+                            ) || undefined,
                     };
                     const quali: Event = {
                         eventName: "Qualifying",
                         datetime:
                             getEventDatetime(
                                 raceData.getElementsByTagName("Qualifying")[0]
-                            ) || new Date(),
+                            ) || undefined,
                     };
                     const sprintTag =
                         raceData.getElementsByTagName("Sprint")[0];
@@ -142,7 +142,7 @@ function App() {
                         eventName: "Sprint",
                         datetime: getEventDatetime(sprintTag),
                     };
-                    const eventArr = [fp1, fp2, fp3, quali, sprint, race];
+                    const eventArr = [fp1, fp2, fp3, quali, sprint, race].filter(event => event.datetime !== undefined);
                     setRaceEvent(race);
                     eventArr.sort((a, b) => {
                         if (a.datetime === undefined) return -1;
