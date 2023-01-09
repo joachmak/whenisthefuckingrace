@@ -78,7 +78,7 @@ function App() {
     const [raceEvent, setRaceEvent] = useState<Event>();
     const [err, setErr] = useState(false);
     useEffect(() => {
-        fetch("https://ergast.com/api/f1/current")
+        fetch("https://ergast.com/api/f1/" + (new Date()).getFullYear())
             .then((res) => res.text())
             .then((data) => {
                 let parser = new DOMParser();
@@ -170,7 +170,7 @@ function App() {
     }, []);
     const classes = useStyles({ screenWidth: screenSize });
     const time_now = new Date();
-    if (time_now.getMonth() >= 10 || time_now.getMonth() < 3) return (
+    if (time_now.getMonth() >= 10) return (
         // API has just stopped working (I hope it comes back next season) so this is just a temporary solution <3
         <div className={classes.container}>
             <h2>The season has ended, bröther.</h2>
