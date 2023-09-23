@@ -100,7 +100,8 @@ function App() {
                 let parser = new DOMParser();
                 let xmlDoc = parser.parseFromString(data, "text/xml");
                 const races = xmlDoc.getElementsByTagName("Race");
-                const time_now = new Date();
+                const timeNow = new Date();
+                const offsetTimeNow = new Date(timeNow.getTime() - EVENT_MINUTE_OFFSET * 60000)
                 for (let i = 0; i < races.length; i++) {
                     // FIND NEXT GP
                     const raceData = races[i];
@@ -112,7 +113,7 @@ function App() {
                     const raceTime =
                         raceData.getElementsByTagName("Time")[0].textContent;
                     const raceDatetime = getRaceDatetime(raceDate!, raceTime!);
-                    if (raceDatetime < time_now) continue;
+                    if (raceDatetime < offsetTimeNow) continue;
                     // FIND NEXT EVENT WITHIN GP
                     const race: Event = {
                         eventName: "Race",
@@ -171,7 +172,7 @@ function App() {
                     for (let i = 0; i < eventArr.length; i++) {
                         if (
                             eventArr[i].datetime === undefined ||
-                            new Date(eventArr[i].datetime!.getTime() + EVENT_MINUTE_OFFSET*60000) < time_now
+                            eventArr[i].datetime! < offsetTimeNow
                         )
                             continue;
                         setNextEventName(racename!);
