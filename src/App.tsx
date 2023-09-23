@@ -31,7 +31,7 @@ const useStyles = createUseStyles({
         color: "#eee",
         letterSpacing: 5,
         textAlign: "center",
-        paddingTop: 20,
+        paddingTop: 40,
     },
     smallTxt: {
         fontSize: (props: StyleProps) => {
@@ -66,6 +66,21 @@ const useStyles = createUseStyles({
         color: "white",
         wordBreak: "break-all",
     },
+    liveBanner: {
+        width: "100vw",
+        background: "linear-gradient(90deg, rgba(196,18,18,1) 0%, rgba(126,5,5,1) 35%, rgba(126,5,5,1) 65%, rgba(196,18,18,1) 100%)",
+        position: "fixed",
+        top: 0,
+        fontSize: 12,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "35px",
+    },
+    urlNoUnderline: {
+        textDecoration: "none",
+        color: "white"
+    }
 });
 
 function App() {
@@ -77,6 +92,7 @@ function App() {
     const [nextEventType, setNextEventType] = useState("");
     const [raceEvent, setRaceEvent] = useState<Event>();
     const [err, setErr] = useState(false);
+    const EVENT_MINUTE_OFFSET = 90;
     useEffect(() => {
         fetch("https://ergast.com/api/f1/" + (new Date()).getFullYear())
             .then((res) => res.text())
@@ -144,16 +160,18 @@ function App() {
                     };
                     const eventArr = [fp1, fp2, fp3, quali, sprint, race].filter(event => event.datetime !== undefined);
                     setRaceEvent(race);
+                    // sort events
                     eventArr.sort((a, b) => {
                         if (a.datetime === undefined) return -1;
                         if (b.datetime === undefined) return 1;
                         if (a.datetime > b.datetime) return 1;
                         return -1;
                     });
+                    // set next event
                     for (let i = 0; i < eventArr.length; i++) {
                         if (
                             eventArr[i].datetime === undefined ||
-                            eventArr[i].datetime! < time_now
+                            new Date(eventArr[i].datetime!.getTime() + EVENT_MINUTE_OFFSET*60000) < time_now
                         )
                             continue;
                         setNextEventName(racename!);
@@ -210,6 +228,17 @@ function App() {
                     </a>
                 </div>
             )}
+            {nextEventName && !err && nextEventDatetime && nextEventDatetime <= new Date() &&
+                <div className={classes.liveBanner}>
+                    <div className="video__icon">
+                        <div className="circle--outer"></div>
+                        <div className="circle--inner"></div>
+                    </div>
+                    <a href={"https://f1tv.formula1.com/"} rel="noreferrer" target={"_blank"} className={classes.urlNoUnderline}>
+                        F1 event is live! 🔗
+                    </a>
+                </div>
+            }
             <div className={classes.section}>
                 {nextEventName && !err ? (
                     <>
