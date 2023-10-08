@@ -2,25 +2,9 @@ import { useEffect, useState } from "react";
 import { createUseStyles } from "react-jss";
 import useWindowDimensions from "./useWindowDimensions";
 
-interface Event {
-    eventName: string; // fp1/fp2/...
-    datetime?: Date; // can be undefined for sprint races
-}
-
 interface StyleProps {
     screenWidth: number;
 }
-
-const getEventDatetime = (el: Element) => {
-    if (el === undefined) return undefined;
-    const date = el.getElementsByTagName("Date")[0].textContent;
-    const time = el.getElementsByTagName("Time")[0].textContent;
-    return new Date(date + "T" + time);
-};
-
-const getRaceDatetime = (date: string, time: string) => {
-    return new Date(date + "T" + time);
-};
 
 const useStyles = createUseStyles({
     container: {
@@ -90,98 +74,58 @@ function App() {
     >(undefined);
     const [nextEventName, setNextEventName] = useState("");
     const [nextEventType, setNextEventType] = useState("");
-    const [raceEvent, setRaceEvent] = useState<Event>();
     const [err, setErr] = useState(false);
-    const EVENT_MINUTE_OFFSET = 90;
     useEffect(() => {
+        const { XMLParser } = require("fast-xml-parser");
         fetch("https://ergast.com/api/f1/" + (new Date()).getFullYear())
             .then((res) => res.text())
             .then((data) => {
                 let parser = new DOMParser();
                 let xmlDoc = parser.parseFromString(data, "text/xml");
                 const races = xmlDoc.getElementsByTagName("Race");
-                const timeNow = new Date();
-                const offsetTimeNow = new Date(timeNow.getTime() - EVENT_MINUTE_OFFSET * 60000)
+                let nextRace = undefined
+                let nextRaceName = undefined
+                let nextRaceDateTime = undefined
+                // find next GP
                 for (let i = 0; i < races.length; i++) {
-                    // FIND NEXT GP
                     const raceData = races[i];
-                    const racename =
-                        raceData.getElementsByTagName("RaceName")[0]
-                            .textContent;
-                    const raceDate =
-                        raceData.getElementsByTagName("Date")[0].textContent;
-                    const raceTime =
-                        raceData.getElementsByTagName("Time")[0].textContent;
-                    const raceDatetime = getRaceDatetime(raceDate!, raceTime!);
-                    if (raceDatetime < offsetTimeNow) continue;
-                    // FIND NEXT EVENT WITHIN GP
-                    const race: Event = {
-                        eventName: "Race",
-                        datetime: raceDatetime,
-                    };
-                    const fp1: Event = {
-                        eventName: "First Practice",
-                        datetime:
-                            getEventDatetime(
-                                raceData.getElementsByTagName(
-                                    "FirstPractice"
-                                )[0]
-                            ) || undefined,
-                    };
-                    const fp2: Event = {
-                        eventName: "Second Practice",
-                        datetime:
-                            getEventDatetime(
-                                raceData.getElementsByTagName(
-                                    "SecondPractice"
-                                )[0]
-                            ) || undefined,
-                    };
-                    const fp3: Event = {
-                        eventName: "Third Practice",
-                        datetime:
-                            getEventDatetime(
-                                raceData.getElementsByTagName(
-                                    "ThirdPractice"
-                                )[0]
-                            ) || undefined,
-                    };
-                    const quali: Event = {
-                        eventName: "Qualifying",
-                        datetime:
-                            getEventDatetime(
-                                raceData.getElementsByTagName("Qualifying")[0]
-                            ) || undefined,
-                    };
-                    const sprintTag =
-                        raceData.getElementsByTagName("Sprint")[0];
-                    const sprint: Event = {
-                        eventName: "Sprint",
-                        datetime: getEventDatetime(sprintTag),
-                    };
-                    const eventArr = [fp1, fp2, fp3, quali, sprint, race].filter(event => event.datetime !== undefined);
-                    setRaceEvent(race);
-                    // sort events
-                    eventArr.sort((a, b) => {
-                        if (a.datetime === undefined) return -1;
-                        if (b.datetime === undefined) return 1;
-                        if (a.datetime > b.datetime) return 1;
-                        return -1;
-                    });
-                    // set next event
-                    for (let i = 0; i < eventArr.length; i++) {
-                        if (
-                            eventArr[i].datetime === undefined ||
-                            eventArr[i].datetime! < offsetTimeNow
-                        )
-                            continue;
-                        setNextEventName(racename!);
-                        setNextEventType(eventArr[i].eventName);
-                        setNextEventDatetime(eventArr[i].datetime);
-                        break;
+                    const parser = new XMLParser();
+                    let data = parser.parse(raceData.innerHTML)
+                    const datetime = new Date(data["Date"] + "T" + data["Time"])
+                    if (datetime > new Date()) {
+                        nextRace = data
+                        nextRaceDateTime = datetime
+                        nextRaceName = data.RaceName.toString()
+                            .toLowerCase()
+                            .replace('grand prix','')
+                        break
                     }
-                    break;
                 }
+                if (nextRace === undefined) return
+                // remove unused tags to simplify next step
+                delete nextRace.Time
+                delete nextRace.Date
+                delete nextRace.RaceName
+                delete nextRace.Circuit
+                // find next event within GP
+                let now = new Date();
+                let nextEventKey = null;
+                let nextEventDateTime = null;
+                for (let key in nextRace) {
+                    let eventDateTime = new Date(`${nextRace[key].Date}T${nextRace[key].Time}`);
+                    if (eventDateTime > now && (nextEventDateTime === null || eventDateTime < nextEventDateTime)) {
+                        nextEventKey = key;
+                        nextEventDateTime = eventDateTime;
+                    }
+                }
+                if (nextEventKey === null) {
+                    nextEventDateTime = nextRaceDateTime
+                    nextEventKey = "Race"
+                }
+                console.log(nextEventDateTime + " " + nextEventKey + " " + nextRaceName)
+                setNextEventDatetime(nextEventDateTime!)
+                setNextEventType(nextEventKey)
+                setNextEventName(nextRaceName)
             })
             .catch(() => {
                 setErr(true);
@@ -303,11 +247,11 @@ function App() {
                     ""
                 )}
             </div>
-            {nextEventType !== "Race" && raceEvent && (
+            {nextEventType !== "Race" && nextEventDatetime && (
                 <div className={classes.section}>
                     <p className={classes.smallTxt}>
                         (Race starts at{" "}
-                        {raceEvent.datetime?.toLocaleString("no-NO")})
+                        {nextEventDatetime.toLocaleString("no-NO")})
                     </p>
                 </div>
             )}
