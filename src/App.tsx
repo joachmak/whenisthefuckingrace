@@ -69,9 +69,8 @@ const useStyles = createUseStyles({
 
 function App() {
     const screenSize = useWindowDimensions();
-    const [nextEventDatetime, setNextEventDatetime] = useState<
-        Date | undefined
-    >(undefined);
+    const [nextRaceDatetime, setNextRaceDatetime] = useState<Date | undefined>(undefined)
+    const [nextEventDatetime, setNextEventDatetime] = useState<Date | undefined>(undefined);
     const [nextEventName, setNextEventName] = useState("");
     const [nextEventType, setNextEventType] = useState("");
     const [err, setErr] = useState(false);
@@ -83,9 +82,9 @@ function App() {
                 let parser = new DOMParser();
                 let xmlDoc = parser.parseFromString(data, "text/xml");
                 const races = xmlDoc.getElementsByTagName("Race");
-                let nextRace = undefined
-                let nextRaceName = undefined
-                let nextRaceDateTime = undefined
+                let _nextGpData = undefined
+                let _nextRaceName = undefined
+                let _nextRaceDateTime = undefined
                 // find next GP
                 for (let i = 0; i < races.length; i++) {
                     const raceData = races[i];
@@ -93,39 +92,39 @@ function App() {
                     let data = parser.parse(raceData.innerHTML)
                     const datetime = new Date(data["Date"] + "T" + data["Time"])
                     if (datetime > new Date()) {
-                        nextRace = data
-                        nextRaceDateTime = datetime
-                        nextRaceName = data.RaceName.toString()
+                        _nextGpData = data
+                        _nextRaceDateTime = datetime
+                        _nextRaceName = data.RaceName.toString()
                             .toLowerCase()
                             .replace('grand prix','')
                         break
                     }
                 }
-                if (nextRace === undefined) return
+                if (_nextGpData === undefined) return
+                setNextRaceDatetime(_nextRaceDateTime);
                 // remove unused tags to simplify next step
-                delete nextRace.Time
-                delete nextRace.Date
-                delete nextRace.RaceName
-                delete nextRace.Circuit
+                delete _nextGpData.Time
+                delete _nextGpData.Date
+                delete _nextGpData.RaceName
+                delete _nextGpData.Circuit
                 // find next event within GP
                 let now = new Date();
                 let nextEventKey = null;
                 let nextEventDateTime = null;
-                for (let key in nextRace) {
-                    let eventDateTime = new Date(`${nextRace[key].Date}T${nextRace[key].Time}`);
+                for (let key in _nextGpData) {
+                    let eventDateTime = new Date(`${_nextGpData[key].Date}T${_nextGpData[key].Time}`);
                     if (eventDateTime > now && (nextEventDateTime === null || eventDateTime < nextEventDateTime)) {
-                        nextEventKey = key;
+                        nextEventKey = key.replace(/([A-Z])/g, ' $1').trim();;
                         nextEventDateTime = eventDateTime;
                     }
                 }
                 if (nextEventKey === null) {
-                    nextEventDateTime = nextRaceDateTime
+                    nextEventDateTime = _nextRaceDateTime
                     nextEventKey = "Race"
                 }
-                console.log(nextEventDateTime + " " + nextEventKey + " " + nextRaceName)
                 setNextEventDatetime(nextEventDateTime!)
                 setNextEventType(nextEventKey)
-                setNextEventName(nextRaceName)
+                setNextEventName(_nextRaceName)
             })
             .catch(() => {
                 setErr(true);
@@ -247,11 +246,11 @@ function App() {
                     ""
                 )}
             </div>
-            {nextEventType !== "Race" && nextEventDatetime && (
+            {nextEventType !== "Race" && nextRaceDatetime && (
                 <div className={classes.section}>
                     <p className={classes.smallTxt}>
                         (Race starts at{" "}
-                        {nextEventDatetime.toLocaleString("no-NO")})
+                        {nextRaceDatetime.toLocaleString("no-NO")})
                     </p>
                 </div>
             )}
