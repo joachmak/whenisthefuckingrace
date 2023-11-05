@@ -131,18 +131,6 @@ function App() {
             });
     }, []);
     const classes = useStyles({ screenWidth: screenSize });
-    const time_now = new Date();
-    if (time_now.getMonth() >= 10) return (
-        // API has just stopped working (I hope it comes back next season) so this is just a temporary solution <3
-        <div className={classes.container}>
-            <h2>The season has ended, bröther.</h2>
-            <img width={150} src={"img/chequered_flag.gif"} alt="chequered flag" />
-            <p className={classes.smallTxt}>
-                Check out <a className={classes.url} href="https://www.instagram.com/f1troll/">F1troll</a> {" "}
-                on instagram for continued F1 entertainment
-            </p>
-        </div>
-    )
     return (
         <div className={classes.container}>
             {err && (
