@@ -1,6 +1,7 @@
 import type {Metadata} from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import {Analytics} from "@vercel/analytics/next";
 
 const mainFont = localFont({
     src: "./fonts/adam-cg-pro.regular.otf",
@@ -24,6 +25,7 @@ export default function RootLayout({
             className={`text-white tracking-[4px] ${mainFont.className} antialiased`}
         >
         {children}
+        <Analytics/>
         </body>
         </html>
     );
