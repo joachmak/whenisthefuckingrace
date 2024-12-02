@@ -3,12 +3,9 @@ import MainWrapper from "@/app/components/MainWrapper";
 import {getEventsFromRawData, RawEventData} from "@/app/utils";
 import {BadWord, BigText, RedWord, SmallText} from "@/app/components/TextTypes";
 import LocalTime from "@/app/components/LocalTime";
-import {headers} from "next/headers";
 import {getDataFromRedisStore, updateRedisStore} from "@/app/redis";
 
 export default async function Home() {
-    const headersList = await headers()
-    const locale = headersList.get("accept-language")?.split(",")[0] ?? "no-NB"
     const data = await fetch("https://api.jolpi.ca/ergast/f1/2024").catch(() => undefined)
     let races: RawEventData[]
     if (data?.ok) {
@@ -40,7 +37,7 @@ export default async function Home() {
                         </section>
                         <section className="flex flex-col items-center gap-2 justify-center">
                             <SmallText>It&apos;s gonna start at</SmallText>
-                            <BigText><LocalTime locale={locale} time={nextEvent.startTime}/></BigText>
+                            <BigText><LocalTime time={nextEvent.startTime}/></BigText>
                             <SmallText>And <i><RedWord>not</RedWord></i> the weird <BadWord>f#cking</BadWord> time
                                 they
                                 display at
@@ -48,7 +45,7 @@ export default async function Home() {
                         </section>
                         {
                             nextRace &&
-                          <SmallText>Race: <LocalTime time={nextRace.startTime} locale={locale}/></SmallText>
+                          <SmallText>Race: <LocalTime time={nextRace.startTime}/></SmallText>
                         }
                     </> :
                     <section>
