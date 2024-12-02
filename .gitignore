@@ -11,6 +11,7 @@
 !.yarn/versions
 
 .idea/
+.env.development.local
 
 # testing
 /coverage
