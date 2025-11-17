@@ -1,3 +1,4 @@
+"use server"
 import React from "react";
 import MainWrapper from "@/app/components/MainWrapper";
 import {getEventsFromRawData, RawEventData} from "@/app/utils";
