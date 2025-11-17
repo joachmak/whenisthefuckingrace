@@ -3,6 +3,7 @@ import {RaceEvent} from "@/app/utils";
 import {BadWord, BigText, RedWord, SmallText} from "@/app/components/TextTypes";
 import LocalTime from "@/app/components/LocalTime";
 import React, {useEffect, useState} from "react";
+import {getRaceData} from "@/app/actions";
 
 interface Props {
     events: RaceEvent[]
@@ -12,8 +13,8 @@ export default function Main({events}: Props) {
     const [isLive, setIsLive] = useState(false);
     const [scrollPosition, setScrollPosition] = useState(0);
     const timeNow = new Date()
-    const nextEvent = events.find(event => event.endTime.getTime() > timeNow.getTime())
-    const nextRace = nextEvent?.type === "race" ? undefined : events.find(event => event.endTime.getTime() > timeNow.getTime() && event.type === "race")
+    const nextEvent = events.findLast(event => event.startTime.getTime() <= timeNow.getTime())
+    const nextRace = nextEvent?.type === "race" ? undefined : events.findLast(event => event.startTime.getTime() <= timeNow.getTime() && event.type === "race")
 
     if (typeof document !== 'undefined') {
         window.addEventListener('scroll', () => {
@@ -22,15 +23,10 @@ export default function Main({events}: Props) {
     }
 
     useEffect(() => {
-        setInterval(() => {
-            const currentYear = new Date().getUTCFullYear();
-            fetch(`https://api.jolpi.ca/ergast/f1/${currentYear}`)
-                .then(response => response.json())
-                .then(data => {
-                    const races = data.MRData.RaceTable.Races;
-                    setIsLive(races !== undefined)
-                });
-        }, 5000);
+        setInterval(async () => {
+            const races = await getRaceData();
+            setIsLive(races !== undefined);
+        }, 1000);
     }, [nextEvent]);
 
     useEffect(() => {
