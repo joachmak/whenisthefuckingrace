@@ -1,4 +1,3 @@
-import type {Metadata} from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import {Analytics} from "@vercel/analytics/next";
@@ -9,10 +8,6 @@ const mainFont = localFont({
     weight: "100",
 });
 
-export const metadata: Metadata = {
-    title: "F1 Time",
-    description: "When is the f*cking race?",
-};
 
 export default function RootLayout({
                                        children,
@@ -20,7 +15,12 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
+        <html>
+        <head>
+            <meta name="googlebot" content="noindex,nofollow"/>
+            <meta name="robots" content="noindex"/>
+            <link rel="alternate" hrefLang="" href="https://whenisthefuckingrace.com"/>
+        </head>
         <body
             className={`text-white tracking-[4px] ${mainFont.className} antialiased`}
         >

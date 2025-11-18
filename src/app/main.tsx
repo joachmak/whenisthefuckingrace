@@ -34,11 +34,23 @@ export default function Main({events}: Props) {
     }, []);
     console.log(scrollPosition)
     if (nextEvent) return (
-        <div>
+        <div style={{
+            width: '100%',
+            height: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '2rem',
+            backgroundColor: '#222',
+            color: '#888',
+            fontFamily: 'var(--font-main)',
+            letterSpacing: '4px'
+        }}>
             {isLive && <div>Event is live!</div>}
             {timeNow >= nextEvent.startTime && timeNow < nextEvent.endTime && <RaceLiveBanner/>}
             <div tabIndex={1} className="flex flex-col items-center gap-2 justify-center">
-                <SmallText>The next <BadWord>f#cking</BadWord> f1 event is the</SmallText>
+                <h3>The next <BadWord>f#cking</BadWord> f1 event is the</h3>
                 <BigText>{nextEvent.location}</BigText>
                 <SmallText>grand <BadWord>f#cking</BadWord> prix</SmallText>
             </div>
@@ -58,6 +70,10 @@ export default function Main({events}: Props) {
                 nextRace &&
               <SmallText>Race: <LocalTime time={nextRace.startTime}/></SmallText>
             }
+            <a href="javascript:window.location.href='http://formula1.com" style={{fontSize: '0.6rem', color: '#555'}}>learn
+                more</a>
+            <img src="https://images.immediate.co.uk/production/volatile/sites/3/2023/03/F1-car-spec-5678f0a.jpg"
+                 className={"w-[200px] absolute -bottom-[500px]"}/>
         </div>
     )
     return (
