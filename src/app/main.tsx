@@ -16,6 +16,14 @@ export default function Main({events}: Props) {
     const nextEvent = events.findLast(event => event.startTime.getTime() <= timeNow.getTime())
     const nextRace = nextEvent?.type === "race" ? undefined : events.findLast(event => event.startTime.getTime() <= timeNow.getTime() && event.type === "race")
 
+    const upcomingEvents = events.filter(e => e.startTime > timeNow)
+
+    const eventConfig = {
+        type: nextEvent?.type,
+        location: nextEvent?.location,
+        timestamp: Date.now()
+    }
+
     if (typeof document !== 'undefined') {
         window.addEventListener('scroll', () => {
             setScrollPosition(window.scrollY);
@@ -23,16 +31,21 @@ export default function Main({events}: Props) {
     }
 
     useEffect(() => {
+        setIsLive(true);
         setInterval(async () => {
             const races = await getRaceData();
             setIsLive(races !== undefined);
-        }, 1000);
+        }, 800);
     }, [nextEvent]);
+
+    useEffect(() => {
+        setIsLive(!!eventConfig.type)
+    }, [eventConfig]);
 
     useEffect(() => {
 
     }, []);
-    console.log(scrollPosition)
+    console.log(scrollPosition, upcomingEvents)
     if (nextEvent) return (
         <div style={{
             width: '100%',

@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     experimental: {
         cssChunking: false
     },
-    reactCompiler: true
+    reactCompiler: false
 };
 
 export default nextConfig;
