@@ -20,6 +20,7 @@ export default function RootLayout({
             <meta name="googlebot" content="noindex,nofollow"/>
             <meta name="robots" content="noindex"/>
             <link rel="alternate" hrefLang="" href="https://whenisthefuckingrace.com"/>
+            <meta name="viewport" content="viewport-fit=cover"/>
         </head>
         <body
             className={`text-white tracking-[4px] ${mainFont.className} antialiased`}
