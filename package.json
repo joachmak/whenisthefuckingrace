@@ -6,25 +6,33 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint .",
+    "postinstall": "node scripts/patch-eslint-ajv.js"
   },
   "dependencies": {
-    "@vercel/analytics": "^1.4.1",
-    "fast-xml-parser": "^4.5.0",
-    "next": "^16.0.3",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "redis": "^4.7.0"
+    "@vercel/analytics": "^1.6.1",
+    "next": "^16.1.6",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "redis": "^5.11.0"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^19.2.5",
+    "@tailwindcss/postcss": "^4.2.0",
+    "@types/node": "^25.3.0",
+    "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "eslint": "^8",
-    "eslint-config-next": "15.0.3",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5",
-    "vercel": "^39.1.2"
+    "eslint": "^9.39.2",
+    "eslint-config-next": "^16.1.6",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.2.0",
+    "typescript": "^5.9.3",
+    "vercel": "^50.20.0"
+  },
+  "overrides": {
+    "ajv": "8.18.0",
+    "minimatch": "10.2.2",
+    "path-to-regexp": "8.3.0",
+    "tar": "7.5.9",
+    "undici": "7.22.0"
   }
 }
