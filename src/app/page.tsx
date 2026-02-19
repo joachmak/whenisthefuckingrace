@@ -4,6 +4,8 @@ import {getEventsFromRawData, RawEventData} from "@/app/utils";
 import {getDataFromRedisStore, updateRedisStore} from "@/app/redis";
 import Main from "@/app/main";
 
+export const dynamic = 'force-dynamic'
+
 export default async function Home() {
     const currentYear = (new Date()).getUTCFullYear()
     const data = await fetch(`https://api.jolpi.ca/ergast/f1/${currentYear}`).catch(() => undefined)

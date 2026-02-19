@@ -3,7 +3,7 @@
 import {RawEventData} from "@/app/utils";
 import {createClient} from "redis";
 
-const REDIS_KEY = "raceData"
+const getRedisKey = () => `raceData:${new Date().getUTCFullYear()}`
 
 export const getDataFromRedisStore = async (): Promise<RawEventData[]> => {
     const url = process.env.REDIS_URL
@@ -18,7 +18,7 @@ export const getDataFromRedisStore = async (): Promise<RawEventData[]> => {
     });
     await client.connect();
 
-    const data = await client.get(REDIS_KEY)
+    const data = await client.get(getRedisKey())
     return JSON.parse(data ?? "[]")
 }
 
@@ -33,5 +33,5 @@ export const updateRedisStore = async (data: RawEventData[]) => {
         console.error('Redis connection error:', err);
     });
     await client.connect();
-    await client.set(REDIS_KEY, JSON.stringify(data));
+    await client.set(getRedisKey(), JSON.stringify(data));
 }
